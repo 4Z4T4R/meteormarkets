@@ -1,0 +1,28 @@
+<!-- mm-claims.ng.html -->
+<div class="container">
+  <header>
+    <h1>Claims List ( {{ incompleteCount() }} )</h1>
+    <meteor-include src="loginButtons"></meteor-include>
+    <label class="hide-completed">
+      <input type="checkbox" ng-model="$parent.hideCompleted" />
+      Hide Completed Claims
+    </label>
+    <form class="new-claim" 
+          ng-submit="addClaim(newClaim); newClaim='';"
+          ng-show="$root.currentUser">
+      <input ng-model="newClaim" type="text" name="text" placeholder="Start a new claim" />
+    </form>
+  </header>
+  <ul>
+    <li ng-repeat="claim in claims" ng-class="{'checked': claim.checked, 'private': claim.private}">
+      <button class="delete" ng-click="deleteClaim(claim)">&times;</button>
+      <input type="checkbox" ng-checked="claim.checked" ng-click="setChecked(claim)" class="toggle-checked" />
+      <button class="toggle-private"
+              ng-if="claim.owner === $root.currentUser._id"
+              ng-click="setPrivate(claim)">
+        {{ claim.private == true ? "Private" : "Public" }}
+      </button>
+      <span class="text"><strong>{{ claim.username }}</strong> - {{ claim.text }}</span>
+    </li>
+  </ul>
+</div>
